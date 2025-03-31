@@ -1,6 +1,8 @@
 package com.spring.store;
 
 import com.spring.store.domain.Address;
+import com.spring.store.domain.Profile;
+import com.spring.store.domain.Tag;
 import com.spring.store.domain.User;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -16,13 +18,13 @@ public class StoreApplication {
             .email("john@codewithmosh.com")
             .build();
 
-        var address = Address.builder()
-            .street("street")
-            .city("city")
-            .zip("zip")
+        var profile = Profile.builder()
+            .bio("bio")
             .build();
 
-        user.addAddress(address);
+        user.setProfile(profile);
+        profile.setUser(user);
+
         System.out.println(user);
     }
 }
