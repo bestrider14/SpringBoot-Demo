@@ -31,10 +31,10 @@ public class User {
     @Column(name = "password")
     private String password;
 
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "user")
+    @OneToOne(mappedBy = "user", cascade = CascadeType.REMOVE)
     private Profile profile;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST)
     @Builder.Default
     private List<Address> addressed = new ArrayList<>();
 
@@ -46,6 +46,13 @@ public class User {
         inverseJoinColumns = @JoinColumn(name = "tag_id")
     )
     private Set<Tag> tags = new HashSet<>();
+
+    @ManyToMany
+    @JoinTable(
+        name = "wishlist",
+        joinColumns = @JoinColumn(name = "user_id"),
+        inverseJoinColumns = @JoinColumn(name = "product_id"))
+    private Set<Product> wishlist = new HashSet<>();
 
     public void addAddress(Address address) {
         addressed.add(address);
@@ -61,5 +68,9 @@ public class User {
         var tag = new Tag(tagName);
         tags.add(tag);
         tag.getUser().add(this);
+    }
+
+    public void addFavoriteProduct(Product product) {
+        wishlist.add(product);
     }
 }
